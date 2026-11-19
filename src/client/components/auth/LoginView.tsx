@@ -541,12 +541,6 @@ export const LoginView: React.FC = () => {
             className="vice-city-art absolute inset-0 h-full w-full object-cover opacity-35"
           />
           <div className="vice-city-vignette absolute inset-0" />
-          <div className="vice-city-scan pointer-events-none absolute inset-y-0 left-0 w-1/3" />
-          <div className="pointer-events-none absolute inset-x-0 bottom-[13%] h-32 opacity-80">
-            <div className="vice-city-wave absolute inset-x-[-8%] bottom-0 h-24" />
-            <div className="vice-city-wave absolute inset-x-[-12%] bottom-8 h-20 opacity-60" />
-            <div className="vice-city-wave absolute inset-x-[-16%] bottom-16 h-16 opacity-40" />
-          </div>
           <div className="relative z-10 flex w-full max-w-xl flex-col items-center px-6 pb-16 sm:px-8 sm:pb-20">
             <div className="vice-city-copy w-full rounded-[28px] border border-[#fff2d4]/20 bg-[#101326]/62 px-6 py-7 shadow-[0_24px_80px_rgba(5,5,18,.45)] backdrop-blur-md sm:px-10 sm:py-9">
               <p className="sunset-display text-[10px] font-bold tracking-[0.42em] text-[#35d8e8]">Escola Online presents</p>

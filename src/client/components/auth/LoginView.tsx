@@ -4,7 +4,6 @@ import { GraduationCap, Lock, User, Landmark, HelpCircle, ArrowRight, AlertTrian
 
 type LoginRole = 'student' | 'teacher';
 
-const rockstarLogoUrl = new URL('../../../../vggl5cawm4ee1.webp', import.meta.url).href;
 const viceCityArtUrl = new URL('../../../../videoframe_22023-1024x576.webp', import.meta.url).href;
 
 export const LoginView: React.FC = () => {
@@ -535,11 +534,11 @@ export const LoginView: React.FC = () => {
       )}
 
       {justLoggedIn && role === 'student' && (
-        <div className="vice-city-screen fixed inset-0 z-[100] flex items-center justify-center overflow-hidden text-center">
+        <div className="vice-city-screen fixed inset-0 z-[100] flex items-center justify-end overflow-hidden text-center">
           <img
             src={viceCityArtUrl}
             alt="Arte de abertura da experiência Vice City"
-            className="vice-city-art absolute inset-0 h-full w-full object-cover opacity-70"
+            className="vice-city-art absolute inset-0 h-full w-full object-cover opacity-35"
           />
           <div className="vice-city-vignette absolute inset-0" />
           <div className="vice-city-scan pointer-events-none absolute inset-y-0 left-0 w-1/3" />
@@ -548,12 +547,7 @@ export const LoginView: React.FC = () => {
             <div className="vice-city-wave absolute inset-x-[-12%] bottom-8 h-20 opacity-60" />
             <div className="vice-city-wave absolute inset-x-[-16%] bottom-16 h-16 opacity-40" />
           </div>
-          <div className="relative z-10 flex w-full max-w-xl flex-col items-center px-6 sm:px-8">
-            <img
-              src={rockstarLogoUrl}
-              alt="Marca Rockstar"
-              className="mb-6 h-16 w-16 rounded-[15px] object-cover shadow-[0_0_34px_rgba(255,139,143,.32)] ring-1 ring-[#fff2d4]/30 sm:h-[74px] sm:w-[74px]"
-            />
+          <div className="relative z-10 flex w-full max-w-xl flex-col items-center px-6 pb-16 sm:px-8 sm:pb-20">
             <div className="vice-city-copy w-full rounded-[28px] border border-[#fff2d4]/20 bg-[#101326]/62 px-6 py-7 shadow-[0_24px_80px_rgba(5,5,18,.45)] backdrop-blur-md sm:px-10 sm:py-9">
               <p className="sunset-display text-[10px] font-bold tracking-[0.42em] text-[#35d8e8]">Escola Online presents</p>
               <h1 className="sunset-display mt-3 text-4xl font-black tracking-[0.16em] text-[#fff2d4] drop-shadow-[0_5px_20px_rgba(16,19,38,.55)] sm:text-6xl">

@@ -1,0 +1,289 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String
+  state     String
+  city      String?
+  schools   School[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model School {
+  id           String      @id @default(uuid())
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+  name         String
+  code         String      @unique // Código INEP ou identificador único
+  city         String
+  state        String
+  type         String      @default("MUNICIPAL") // MUNICIPAL, ESTADUAL, PRIVADA
+  isActive     Boolean     @default(true)
+  users        User[]
+  classes      Class[]
+  auditLogs    AuditLog[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model User {
+  id                 String           @id @default(uuid())
+  schoolId           String
+  school             School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  registrationNumber String // RA / Matrícula escolar
+  cpf                String? // CPF (usado no login de professores / servidor)
+  name               String
+  email              String?
+  passwordHash       String
+  role               String           @default("STUDENT") // STUDENT, TEACHER, COORDINATOR, ADMIN, SUPERADMIN
+  avatarUrl          String?
+  phone              String?
+  sedToken           String? // Token SED SP (Sala do Futuro) — usado no webview de Tarefas
+  sedCookie          String? // Cookie de sessão sf_sid da SED — destrava as APIs de conteúdo digital
+  frequencySnapshot  String? // Última frequência oficial sincronizada (JSON)
+  isActive           Boolean          @default(true)
+  failedAttempts     Int              @default(0)
+  lockUntil          DateTime?
+  lastLoginAt        DateTime?
+  isMonitor          Boolean          @default(false) // Aluno monitor (mentoria Sala do Futuro)
+  enrollments        Enrollment[]
+  messages           Message[]
+  createdAssignments Assignment[]
+  submissions        AssignmentSubmission[]
+  materialsUploaded  Material[]
+  auditLogs          AuditLog[]
+  notifications      Notification[]
+  classroomSessions  ClassroomSession[]
+  studentTasks       StudentTask[]
+  attendanceDays     AttendanceDay[]
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+
+  @@unique([schoolId, registrationNumber])
+  @@index([cpf])
+  @@index([registrationNumber])
+  @@index([schoolId])
+  @@index([role])
+  @@index([isMonitor])
+}
+
+model Class {
+  id          String             @id @default(uuid())
+  schoolId    String
+  school      School             @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name        String             // ex: 8º Ano A
+  grade       String             // ex: 8º Ano Fundamental
+  shift       String             @default("MANHA") // MANHA, TARDE, NOITE, INTEGRAL
+  year        Int                @default(2026)
+  code        String             @unique
+  bannerUrl   String?
+  isActive    Boolean            @default(true)
+  enrollments Enrollment[]
+  channels    Channel[]
+  assignments Assignment[]
+  materials   Material[]
+  sessions    ClassroomSession[]
+  schedules   ClassSchedule[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@index([schoolId])
+  @@index([code])
+}
+
+model Enrollment {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  role      String   @default("STUDENT") // STUDENT, TEACHER, ASSISTANT
+  subject   String?  // Matéria lecionada caso seja professor
+  joinedAt  DateTime @default(now())
+
+  @@unique([userId, classId])
+  @@index([userId])
+  @@index([classId])
+}
+
+model Channel {
+  id          String    @id @default(uuid())
+  classId     String
+  class       Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  name        String
+  type        String    @default("TEXT")
+  isLocked    Boolean   @default(false)
+  messages    Message[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([classId])
+  @@index([type])
+}
+
+model ClassSchedule {
+  id          String   @id @default(uuid())
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  dayOfWeek   Int      // 1 = Segunda ... 5 = Sexta (padrão SED: DiaDaSemana)
+  startTime   String   // "12:50:00"
+  endTime     String   // "13:40:00"
+  subject     String   // "MATEMATICA" / "INTERVALO"
+  subjectId   Int      // disciplináId da SED (-1 para INTERVALO)
+  isRecess    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@unique([classId, dayOfWeek, startTime])
+  @@index([classId, dayOfWeek])
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  channelId   String
+  channel     Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User     @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  content     String
+  attachments String?
+  isPinned    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([channelId])
+  @@index([senderId])
+  @@index([createdAt])
+}
+
+model ClassroomSession {
+  id            String    @id @default(uuid())
+  classId       String
+  class         Class     @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId     String
+  teacher       User      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  title         String
+  subject       String?
+  status        String    @default("ACTIVE") // ACTIVE, ENDED
+  allowStudentCam Boolean @default(true)
+  allowStudentMic Boolean @default(true)
+  allowStudentScreen Boolean @default(false)
+  startedAt     DateTime  @default(now())
+  endedAt       DateTime?
+}
+
+model Assignment {
+  id          String                 @id @default(uuid())
+  classId     String
+  class       Class                  @relation(fields: [classId], references: [id], onDelete: Cascade)
+  teacherId   String
+  teacher     User                   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  subject     String?
+  dueDate     DateTime?
+  maxScore    Float                  @default(10.0)
+  attachments String?                // JSON
+  submissions AssignmentSubmission[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+}
+
+model AssignmentSubmission {
+  id           String     @id @default(uuid())
+  assignmentId String
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  studentId    String
+  student      User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  content      String?
+  attachments  String?    // JSON
+  score        Float?
+  feedback     String?
+  submittedAt  DateTime   @default(now())
+
+  @@unique([assignmentId, studentId])
+}
+
+model Material {
+  id          String   @id @default(uuid())
+  classId     String
+  class       Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  uploaderId  String
+  uploader    User     @relation(fields: [uploaderId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String   // PDF, DOCX, VIDEO, LINK, IMAGE
+  fileSize    String?
+  createdAt   DateTime @default(now())
+}
+
+model StudentTask {
+  id             String   @id @default(uuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taskId         String // ID da tarefa na CMSP (assessment id)
+  subject        String? // Componente curricular (ex.: MATEMATICA)
+  title         String?
+  description   String?
+  author        String?
+  status        String   @default("in_progress") // in_progress | finished | ...
+  style         String? // tipo da atividade (ex.: "multiple_choice")
+  publishAt     DateTime?
+  dueAt         DateTime?
+  answers       String? // JSON bruto
+  raw           String? // Resposta bruta do item
+  turma         String? // publication_target usada na consulta
+  syncCount     Int      @default(1)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, taskId])
+  @@index([userId, status])
+  @@index([userId, dueAt])
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// Registro diário de presença/falta do aluno (marcação na plataforma).
+model AttendanceDay {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dia       String   // Data no formato YYYY-MM-DD
+  status    String   // PRESENTE | FALTA
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, dia])
+  @@index([userId, dia])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action      String   // LOGIN, CLASS_START, PERMISSION_CHANGE, USER_CREATE, ETC
+  resource    String
+  ipAddress   String?
+  userAgent   String?
+  details     String?  // JSON string
+  createdAt   DateTime @default(now())
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Escola Online",
+  "short_name": "Escola Online",
+  "description": "Plataforma escolar de comunicação, chat e aula virtual — suas turmas, professores e colegas em um só lugar.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1e1f22",
+  "theme_color": "#5865F2",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["education", "social"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

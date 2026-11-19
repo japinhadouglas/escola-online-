@@ -1,0 +1,39 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+
+# Dependencies and build output
+node_modules/
+dist/
+.tmp-build/
+.work/
+
+# Local databases and runtime files
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+prisma/dev.db
+
+# Logs and local diagnostics
+*.log
+*.err
+*.out
+tunnel-url.txt
+health.log
+health.err
+server.log
+server.err
+node-version.log
+node-version.err
+curl-out.log
+curl-err.log
+
+# Local binaries and OS/editor files
+cloudflared.exe
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

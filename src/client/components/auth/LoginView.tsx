@@ -209,7 +209,7 @@ export const LoginView: React.FC = () => {
       setWelcomeName(loggedUserName);
       setLoadingMsg(`Bem-vindo(a), ${loggedUserName}, em Vice City.`);
       setJustLoggedIn(true);
-      await new Promise(r => setTimeout(r, 650));
+      await new Promise(r => setTimeout(r, role === 'student' ? 1900 : 650));
       login(data.token, data.user);
     } catch (err: any) {
       timers.forEach(clearTimeout);
@@ -527,6 +527,29 @@ export const LoginView: React.FC = () => {
             >
               Entendido
             </button>
+          </div>
+        </div>
+      )}
+
+      {justLoggedIn && role === 'student' && (
+        <div className="vice-city-screen fixed inset-0 z-[100] flex items-center justify-center overflow-hidden text-center">
+          <div className="vice-city-scan pointer-events-none absolute inset-y-0 left-0 w-1/3" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-[13%] h-32 opacity-80">
+            <div className="vice-city-wave absolute inset-x-[-8%] bottom-0 h-24" />
+            <div className="vice-city-wave absolute inset-x-[-12%] bottom-8 h-20 opacity-60" />
+            <div className="vice-city-wave absolute inset-x-[-16%] bottom-16 h-16 opacity-40" />
+          </div>
+          <div className="relative z-10 flex flex-col items-center px-6">
+            <div className="vice-city-sun mb-8 h-28 w-28 rounded-full bg-gradient-to-b from-[#fff2d4] via-[#ffb27f] to-[#ff4f70]" />
+            <p className="sunset-display text-[11px] font-bold tracking-[0.42em] text-[#35d8e8]">Escola Online presents</p>
+            <h1 className="sunset-display mt-3 text-5xl font-black tracking-[0.12em] text-[#fff2d4] drop-shadow-[0_5px_20px_rgba(16,19,38,.55)] sm:text-7xl">
+              Vice City
+            </h1>
+            <p className="mt-5 text-base font-medium text-[#fff2d4]/85 sm:text-lg">
+              Bem-vindo(a), <span className="font-bold text-white">{welcomeName}</span>
+            </p>
+            <div className="mt-8 h-px w-40 bg-gradient-to-r from-transparent via-[#ff4f70] to-transparent" />
+            <p className="mt-4 text-[10px] uppercase tracking-[0.34em] text-[#fff2d4]/55">Sua jornada começa agora</p>
           </div>
         </div>
       )}

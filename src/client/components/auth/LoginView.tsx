@@ -232,28 +232,28 @@ export const LoginView: React.FC = () => {
   }, [identifier, digit, role]);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#1e1f22] text-[#dbdee1] flex flex-col">
+    <div className="sunset-shell relative min-h-screen w-full overflow-hidden text-[#fff2d4] flex flex-col">
       {/* Fundo com blobs suaves (igual ao Discord) */}
       <div className="pointer-events-none absolute inset-0 select-none" aria-hidden="true">
-        <div className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-[#5865F2] opacity-[0.13] blur-[90px]" />
-        <div className="absolute top-1/4 -right-20 h-80 w-80 rounded-full bg-[#3BA55C] opacity-[0.08] blur-[100px]" />
-        <div className="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-[#ED4245] opacity-[0.06] blur-[110px]" />
+        <div className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-[#ff4f70] opacity-[0.2] blur-[90px]" />
+        <div className="absolute top-1/4 -right-20 h-80 w-80 rounded-full bg-[#35d8e8] opacity-[0.12] blur-[100px]" />
+        <div className="absolute bottom-0 left-1/4 h-72 w-72 rounded-full bg-[#6c4cff] opacity-[0.12] blur-[110px]" />
       </div>
 
       <div className="relative z-10 flex min-h-screen flex-col">
       {/* Topo mínimo */}
-      <header className="border-b border-[#26272b] bg-[#232428]/90 backdrop-blur-sm">
+      <header className="border-b border-[#fff2d4]/10 bg-[#101326]/75 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#2b2d31] flex items-center justify-center">
-              <GraduationCap className="text-[#f2f3f5]" style={{ width: 18, height: 18 }} />
+            <div className="sunset-coral-glow w-8 h-8 rounded-[11px] bg-[#ff4f70] flex items-center justify-center">
+              <GraduationCap className="text-[#101326]" style={{ width: 18, height: 18 }} />
             </div>
-            <span className="text-sm font-semibold text-[#f2f3f5]">Escola Online</span>
+            <span className="sunset-display text-sm font-semibold text-[#fff2d4]">Escola Online</span>
           </div>
           <button
             type="button"
             onClick={() => setShowHelpModal(true)}
-            className="flex items-center gap-1 text-sm text-[#b5bac1] hover:text-white transition-colors"
+            className="flex items-center gap-1 text-sm text-[#35d8e8] hover:text-[#fff2d4] transition-colors"
           >
             <HelpCircle className="w-4 h-4" />
             Ajuda

@@ -475,16 +475,16 @@ export const DiscordClassroomView: React.FC<Props> = ({ classId }) => {
   );
 
   return (
-    <div className="flex-1 flex min-w-0 h-full">
+    <div className="sunset-shell flex-1 flex min-w-0 h-full">
       {/* Channel nav — desktop only */}
-      <div className="hidden md:flex w-[240px] bg-[#2b2d31] flex-col flex-shrink-0">
+      <div className="hidden md:flex w-[240px] bg-[#101326]/90 border-r border-[#fff2d4]/10 flex-col flex-shrink-0">
         <ChannelList />
       </div>
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col min-w-0 bg-[#313338]">
+      <div className="flex-1 flex flex-col min-w-0 bg-[#19172b]/80">
         {/* Channel header */}
-        <div className="h-12 px-3 md:px-4 flex items-center justify-between border-b border-[#1f2023] bg-[#313338] flex-shrink-0 shadow-sm">
+        <div className="h-14 px-3 md:px-4 flex items-center justify-between border-b border-[#fff2d4]/10 bg-[#101326]/75 flex-shrink-0 shadow-sm">
           <div className="flex items-center gap-2 min-w-0">
             <button
               onClick={() => setShowMobileNav(!showMobileNav)}
@@ -494,21 +494,21 @@ export const DiscordClassroomView: React.FC<Props> = ({ classId }) => {
             </button>
             {showMentoria && user?.isMonitor === true ? (
               <>
-                <MessageSquare className="w-5 h-5 text-[#ED4245] flex-shrink-0" />
-                <Shield className="w-4 h-4 text-[#ED4245] ml-1 flex-shrink-0" />
+                <MessageSquare className="w-5 h-5 text-[#ff4f70] flex-shrink-0" />
+                <Shield className="w-4 h-4 text-[#ff4f70] ml-1 flex-shrink-0" />
               </>
             ) : showTimetable ? (
-              <CalendarDays className="w-5 h-5 text-[#5865F2] flex-shrink-0" />
+              <CalendarDays className="w-5 h-5 text-[#35d8e8] flex-shrink-0" />
             ) : selectedChannel?.isLocked ? (
               <Lock className="w-5 h-5 text-amber-400 flex-shrink-0" />
             ) : (
               <Hash className="w-5 h-5 text-slate-500 flex-shrink-0" />
             )}
-            <span className="font-bold text-sm text-white truncate">
+            <span className="sunset-display font-bold text-sm text-[#fff2d4] truncate">
               {showMentoria && user?.isMonitor === true ? 'Mentoria (Monitores)' : showTimetable ? 'Horário de Aulas' : selectedChannel?.name || 'Selecione um canal'}
             </span>
-            <span className="hidden sm:block w-px h-5 bg-[#3f4147] mx-1" />
-            <span className="hidden sm:block text-xs text-slate-500 truncate">
+            <span className="hidden sm:block w-px h-5 bg-[#fff2d4]/15 mx-1" />
+            <span className="hidden sm:block text-xs text-[#35d8e8]/70 truncate">
               {showMentoria && user?.isMonitor === true
                 ? 'Chat exclusivo entre monitores da turma'
                 : showTimetable
@@ -620,12 +620,12 @@ export const DiscordClassroomView: React.FC<Props> = ({ classId }) => {
                 value={inputText}
                 onChange={(e) => handleInput(e.target.value)}
                 placeholder={`Enviar mensagem em #${selectedChannel?.name || '...'}`}
-                className="w-full pl-4 pr-12 py-3 bg-[#383a40] rounded-lg text-[15px] text-[#dbdee1] placeholder-[#6d6f78] focus:outline-none border-none"
+                className="w-full pl-4 pr-12 py-3 bg-[#101326]/90 border border-[#fff2d4]/10 rounded-[14px] text-[15px] text-[#fff2d4] placeholder-[#fff2d4]/30 focus:outline-none focus:border-[#35d8e8]/70 focus:shadow-[0_0_22px_rgba(53,216,232,.14)]"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim()}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#b5bac1] hover:text-[#5865F2] disabled:opacity-30 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#fff2d4]/50 hover:text-[#35d8e8] disabled:opacity-30 transition-colors"
               >
                 <Send className="w-5 h-5" />
               </button>

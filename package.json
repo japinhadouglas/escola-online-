@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "concurrently --kill-others-on-fail --names \"SERVER,CLIENT\" --prefix-colors \"green,blue\" \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "node --watch --import tsx src/server/index.ts",
-    "dev:client": "vite",
-    "build:client": "vite build",
+    "dev:client": "vite --configLoader runner",
+    "build:client": "vite --configLoader runner build",
     "build:server": "tsc -p tsconfig.server.json",
     "build": "npm run build:client && npm run build:server",
     "start": "prisma db push --skip-generate && node dist/server/server/index.js",

@@ -67,19 +67,19 @@ export const App: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen bg-[#313338] text-slate-100 overflow-hidden font-sans">
+    <div className="sunset-shell flex h-screen text-slate-100 overflow-hidden font-sans">
       {/* Far-left server/class list bar — like Discord server icons */}
-      <div className="w-[56px] md:w-[72px] bg-[#1e1f22] flex flex-col items-center py-2 md:py-3 gap-1.5 md:gap-2 flex-shrink-0 h-full overflow-y-auto">
+      <div className="w-[56px] md:w-[82px] bg-[#0b0d1c]/95 border-r border-[#fff2d4]/10 flex flex-col items-center py-2 md:py-3 gap-1.5 md:gap-2 flex-shrink-0 h-full overflow-y-auto">
         {/* Home button / Logo */}
         <button
           onClick={() => { setSelectedClassId(null); }}
-          className="w-11 h-11 md:w-12 md:h-12 rounded-[22px] md:rounded-[24px] bg-[#5865F2] hover:rounded-[14px] md:hover:rounded-[16px] transition-all duration-200 flex items-center justify-center flex-shrink-0 group relative"
+          className="sunset-coral-glow w-11 h-11 md:w-12 md:h-12 rounded-[18px] bg-gradient-to-br from-[#ff4f70] to-[#ff8b8f] hover:rounded-[10px] flex items-center justify-center flex-shrink-0 group relative"
           title="Escola Online"
         >
-          <GraduationCap className="w-6 h-6 md:w-7 md:h-7 text-white" />
+          <GraduationCap className="w-6 h-6 md:w-7 md:h-7 text-[#101326]" />
         </button>
 
-        <div className="w-7 md:w-8 h-[2px] bg-[#35363c] rounded-full my-0.5 md:my-1 flex-shrink-0" />
+        <div className="w-7 md:w-10 h-[2px] bg-gradient-to-r from-[#ff4f70] to-[#35d8e8] rounded-full my-0.5 md:my-1 flex-shrink-0" />
 
         {/* Class servers */}
         {classes.map((c: any) => (
@@ -95,8 +95,8 @@ export const App: React.FC = () => {
               title={c.name}
               className={`w-11 h-11 md:w-12 md:h-12 flex items-center justify-center text-xs md:text-sm font-bold transition-all duration-200 flex-shrink-0 ${
                 selectedClassId === c.id
-                  ? 'rounded-[14px] md:rounded-[16px] bg-[#4847f0] text-white ring-2 ring-white/20'
-                  : 'rounded-[22px] md:rounded-[24px] hover:rounded-[14px] md:hover:rounded-[16px] text-white hover:bg-[#5865F2]'
+                  ? 'rounded-[12px] bg-[#35d8e8] text-[#101326] ring-2 ring-[#fff2d4]/40 shadow-[0_0_24px_rgba(53,216,232,.24)]'
+                  : 'rounded-[18px] hover:rounded-[10px] text-[#fff2d4] hover:bg-[#ff4f70]'
               } ${gradeColor(c.grade)}`}
             >
               {c.name.split(' ').map((w: string) => w[0]).join('').slice(0, 3)}
@@ -109,19 +109,19 @@ export const App: React.FC = () => {
 
         {/* User avatar at bottom */}
         <div className="relative flex-shrink-0">
-          <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-[10px] md:text-[11px] font-bold text-white overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
+          <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-[#35d8e8] to-[#6c4cff] flex items-center justify-center text-[10px] md:text-[11px] font-bold text-[#101326] overflow-hidden cursor-pointer hover:opacity-80 transition-opacity">
             {user.avatarUrl ? (
               <img src={user.avatarUrl} alt="" className="w-full h-full object-cover" />
             ) : (
               user.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)
             )}
           </div>
-          <div className="absolute -bottom-0.5 -right-0.5 w-3 md:w-3.5 h-3 md:h-3.5 bg-[#23A559] rounded-full border-[2.5px] border-[#1e1f22]" />
+          <div className="absolute -bottom-0.5 -right-0.5 w-3 md:w-3.5 h-3 md:h-3.5 bg-[#ff4f70] rounded-full border-[2.5px] border-[#0b0d1c]" />
         </div>
 
         <button
           onClick={logout}
-          className="w-9 h-9 md:w-10 md:h-10 rounded-[22px] md:rounded-[24px] bg-[#313338] hover:bg-[#ED4245] text-slate-500 hover:text-white transition-all duration-200 flex items-center justify-center flex-shrink-0"
+          className="w-9 h-9 md:w-10 md:h-10 rounded-[16px] bg-[#19172b] hover:bg-[#ff4f70] text-[#fff2d4]/60 hover:text-[#101326] transition-all duration-200 flex items-center justify-center flex-shrink-0"
           title="Sair"
         >
           <LogOut className="w-4 h-4 md:w-5 md:h-5" />
@@ -133,13 +133,14 @@ export const App: React.FC = () => {
         {selectedClassId ? (
           <DiscordClassroomView classId={selectedClassId} />
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-slate-400 gap-4 px-4 overflow-y-auto">
-            <div className="w-20 h-20 bg-[#5865F2]/20 rounded-full flex items-center justify-center">
-              <GraduationCap className="w-10 h-10 text-[#5865F2]" />
+          <div className="flex-1 flex flex-col items-center justify-center text-[#fff2d4]/65 gap-4 px-4 overflow-y-auto">
+            <div className="sunset-coral-glow w-20 h-20 bg-gradient-to-br from-[#ff4f70] to-[#6c4cff] rounded-[28px] rotate-3 flex items-center justify-center">
+              <GraduationCap className="w-10 h-10 text-[#101326] -rotate-3" />
             </div>
             <div className="text-center">
-              <h2 className="text-xl font-bold text-white mb-1">{user.role === 'TEACHER' ? 'Visão do Professor' : 'Escola Online'}</h2>
-              <p className="text-sm text-slate-400">
+              <p className="sunset-display text-[10px] text-[#35d8e8] mb-2">Escola Online / Central</p>
+              <h2 className="sunset-display text-2xl font-bold text-[#fff2d4] mb-1">{user.role === 'TEACHER' ? 'Visão do Professor' : 'Escola Online'}</h2>
+              <p className="text-sm text-[#fff2d4]/55">
                 {user.role === 'TEACHER' ? 'Selecione uma turma para acompanhar ou abrir uma Sala Online' : 'Selecione uma turma para começar'}
               </p>
             </div>
@@ -168,18 +169,18 @@ export const App: React.FC = () => {
                         <button
                           key={c.id}
                           onClick={() => setSelectedClassId(c.id)}
-                          className="bg-[#2b2d31] hover:bg-[#383a40] border border-[#3f4147] hover:border-[#5865F2] rounded-xl p-4 text-left transition-all duration-200 group shadow-lg shadow-black/10"
+                          className="sunset-panel hover:border-[#ff4f70]/70 rounded-[22px] p-4 text-left transition-all duration-200 group shadow-lg shadow-black/20"
                         >
                           <div className="flex items-start justify-between mb-2">
-                            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#5865F2] to-[#8b5cf6] flex items-center justify-center text-sm font-bold text-white group-hover:scale-110 transition-transform shadow-md">
+                            <div className="w-11 h-11 rounded-[14px] bg-gradient-to-br from-[#ff4f70] to-[#6c4cff] flex items-center justify-center text-sm font-bold text-[#101326] group-hover:scale-110 transition-transform shadow-md">
                               {c.name.split(' ').map((w: string) => w[0]).join('').slice(0, 3)}
                             </div>
-                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#5865F2]/15 text-[#949CF7]">
+                            <span className="sunset-chip text-[9px] font-semibold px-2 py-0.5 rounded-full">
                               {c.studentCount} alunos
                             </span>
                           </div>
-                          <p className="text-sm font-bold text-white truncate">{c.name}</p>
-                          <p className="text-[11px] text-slate-400 mt-0.5 truncate">{c.grade}</p>
+                          <p className="sunset-display text-sm font-bold text-[#fff2d4] truncate">{c.name}</p>
+                          <p className="text-[11px] text-[#35d8e8]/75 mt-0.5 truncate">{c.grade}</p>
                           {c.teacherNames?.length > 0 && (
                             <div className="flex items-center gap-1 mt-2.5">
                               <div className="flex -space-x-1.5">

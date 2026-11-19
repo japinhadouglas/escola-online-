@@ -3,10 +3,105 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-[#313338] text-slate-100 antialiased;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  :root {
+    --sunset-coral: #ff4f70;
+    --sunset-coral-soft: #ff8b8f;
+    --pool-blue: #35d8e8;
+    --sunset-cream: #fff2d4;
+    --night-ink: #101326;
+    --night-plum: #19172b;
   }
+
+  body {
+    @apply text-slate-100 antialiased;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255, 79, 112, 0.18), transparent 30%),
+      radial-gradient(circle at 88% 14%, rgba(53, 216, 232, 0.14), transparent 28%),
+      linear-gradient(135deg, var(--night-ink) 0%, var(--night-plum) 58%, #291737 100%);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-family: "Trebuchet MS", Arial, sans-serif;
+  }
+}
+
+/* Identidade visual própria: pôster urbano de pôr do sol, sem assets externos. */
+.sunset-shell {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(135deg, rgba(16, 19, 38, 0.96), rgba(35, 23, 49, 0.96)),
+    radial-gradient(circle at 80% 0%, rgba(53, 216, 232, 0.13), transparent 30%);
+}
+
+.sunset-shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  mix-blend-mode: soft-light;
+}
+
+.sunset-display {
+  font-family: "Arial Narrow", "Trebuchet MS", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sunset-panel {
+  background: linear-gradient(145deg, rgba(31, 28, 52, 0.96), rgba(18, 20, 39, 0.96));
+  border: 1px solid rgba(255, 242, 212, 0.12);
+  box-shadow: 0 18px 50px rgba(5, 5, 18, 0.28), inset 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.sunset-coral-glow {
+  box-shadow: 0 0 0 1px rgba(255, 79, 112, 0.55), 0 0 26px rgba(255, 79, 112, 0.22);
+}
+
+.sunset-blue-glow {
+  box-shadow: 0 0 0 1px rgba(53, 216, 232, 0.45), 0 0 26px rgba(53, 216, 232, 0.16);
+}
+
+.sunset-chip {
+  border: 1px solid rgba(255, 242, 212, 0.2);
+  background: rgba(255, 242, 212, 0.07);
+  color: var(--sunset-cream);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sunset-shell input,
+.sunset-shell textarea,
+.sunset-shell select {
+  color: var(--sunset-cream);
+  background-color: rgba(16, 19, 38, 0.82);
+}
+
+.sunset-shell input::placeholder,
+.sunset-shell textarea::placeholder {
+  color: rgba(255, 242, 212, 0.38);
+}
+
+.sunset-shell input:focus,
+.sunset-shell textarea:focus,
+.sunset-shell select:focus {
+  border-color: rgba(53, 216, 232, 0.72);
+  box-shadow: 0 0 0 3px rgba(53, 216, 232, 0.12);
+  outline: none;
+}
+
+.sunset-shell form button[type="submit"] {
+  background: linear-gradient(100deg, var(--sunset-coral), #ff8b8f 55%, var(--pool-blue));
+  color: var(--night-ink);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 26px rgba(255, 79, 112, 0.18);
+}
+
+.sunset-shell form button[type="submit"]:hover:not(:disabled) {
+  filter: saturate(1.12) brightness(1.06);
 }
 
 /* Custom Scrollbars */
@@ -16,16 +111,25 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #101326;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: linear-gradient(#ff4f70, #6c4cff);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #35d8e8;
+}
+
+button, a, input, select, textarea {
+  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease,
+    box-shadow 180ms ease, transform 180ms ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
 }
 
 /* Floating reaction animation */

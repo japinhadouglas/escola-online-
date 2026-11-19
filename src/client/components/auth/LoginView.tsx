@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { GraduationCap, Lock, User, Landmark, HelpCircle, ArrowRight, AlertTriangle, X, Eye, EyeOff, Check } from 'lucide-react';
+import viceCityArtUrl from '../../../../videoframe_22023-1024x576.webp';
+import viceCityVideoUrl from '../../../../gta 6.mp4';
 
 type LoginRole = 'student' | 'teacher';
-
-const viceCityArtUrl = new URL('../../../../videoframe_22023-1024x576.webp', import.meta.url).href;
 
 export const LoginView: React.FC = () => {
   const { login } = useAuth();
@@ -23,6 +23,7 @@ export const LoginView: React.FC = () => {
   const [shaking, setShaking] = useState(false);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
   const [welcomeName, setWelcomeName] = useState('');
+  const [videoFailed, setVideoFailed] = useState(false);
 
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -535,11 +536,25 @@ export const LoginView: React.FC = () => {
 
       {justLoggedIn && role === 'student' && (
         <div className="vice-city-screen fixed inset-0 z-[100] flex items-center justify-end overflow-hidden text-center">
-          <img
-            src={viceCityArtUrl}
-            alt="Arte de abertura da experiência Vice City"
-            className="vice-city-art absolute inset-0 h-full w-full object-cover opacity-35"
-          />
+          {videoFailed ? (
+            <img
+              src={viceCityArtUrl}
+              alt="Arte de abertura da experiência Vice City"
+              className="vice-city-art absolute inset-0 h-full w-full object-cover opacity-35"
+            />
+          ) : (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster={viceCityArtUrl}
+              onError={() => setVideoFailed(true)}
+              className="vice-city-art absolute inset-0 h-full w-full object-cover opacity-45"
+            >
+              <source src={viceCityVideoUrl} type="video/mp4" />
+            </video>
+          )}
           <div className="vice-city-vignette absolute inset-0" />
           <div className="relative z-10 flex w-full max-w-xl flex-col items-center px-6 pb-16 sm:px-8 sm:pb-20">
             <div className="vice-city-copy w-full rounded-[28px] border border-[#fff2d4]/20 bg-[#101326]/62 px-6 py-7 shadow-[0_24px_80px_rgba(5,5,18,.45)] backdrop-blur-md sm:px-10 sm:py-9">

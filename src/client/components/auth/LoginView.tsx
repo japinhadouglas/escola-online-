@@ -20,6 +20,7 @@ export const LoginView: React.FC = () => {
   const [errorKey, setErrorKey] = useState(0);
   const [shaking, setShaking] = useState(false);
   const [justLoggedIn, setJustLoggedIn] = useState(false);
+  const [welcomeName, setWelcomeName] = useState('');
 
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -36,6 +37,7 @@ export const LoginView: React.FC = () => {
     setErrorMsg(null);
     setCapsLock(false);
     setJustLoggedIn(false);
+    setWelcomeName('');
     setShowPassword(false);
   };
 
@@ -203,7 +205,9 @@ export const LoginView: React.FC = () => {
         throw new Error(data.error || 'Falha ao autenticar.');
       }
 
-      setLoadingMsg(`Bem-vindo(a), ${data.user?.name || 'Professor'}!`);
+      const loggedUserName = data.user?.name || (role === 'teacher' ? 'Professor' : 'Aluno');
+      setWelcomeName(loggedUserName);
+      setLoadingMsg(`Bem-vindo(a), ${loggedUserName}, em Vice City.`);
       setJustLoggedIn(true);
       await new Promise(r => setTimeout(r, 650));
       login(data.token, data.user);
@@ -273,8 +277,12 @@ export const LoginView: React.FC = () => {
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#5865F2] shadow-lg shadow-[#5865F2]/25">
               <GraduationCap className="text-white" style={{ width: 26, height: 26 }} />
             </div>
-            <h2 className="text-2xl font-bold text-white">Bem-vindo de volta!</h2>
-            <p className="text-sm text-[#b5bac1] mt-1.5">Estamos muito animados em te ver novamente!</p>
+            <h2 className="sunset-display text-2xl font-bold text-[#fff2d4]">
+              {justLoggedIn ? `Bem-vindo(a), ${welcomeName}` : 'Bem-vindo de volta!'}
+            </h2>
+            <p className="text-sm text-[#35d8e8] mt-1.5">
+              {justLoggedIn ? 'Você está em Vice City.' : 'Estamos muito animados em te ver novamente!'}
+            </p>
           </div>
 
           {/* Seletor Aluno/Professor */}
@@ -442,7 +450,7 @@ export const LoginView: React.FC = () => {
               {justLoggedIn ? (
                 <span className="flex items-center gap-2">
                   <Check className="w-4 h-4" />
-                  Bem-vindo(a)!
+                  {welcomeName ? `Bem-vindo(a), ${welcomeName}` : 'Bem-vindo(a)!'}
                 </span>
               ) : isLoading ? (
                 <span className="flex items-center gap-2">

@@ -209,7 +209,7 @@ export const LoginView: React.FC = () => {
       setWelcomeName(loggedUserName);
       setLoadingMsg(`Bem-vindo(a), ${loggedUserName}, em Vice City.`);
       setJustLoggedIn(true);
-      await new Promise(r => setTimeout(r, role === 'student' ? 1900 : 650));
+      await new Promise(r => setTimeout(r, role === 'student' ? 10000 : 650));
       login(data.token, data.user);
     } catch (err: any) {
       timers.forEach(clearTimeout);

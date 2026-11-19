@@ -4,6 +4,9 @@ import { GraduationCap, Lock, User, Landmark, HelpCircle, ArrowRight, AlertTrian
 
 type LoginRole = 'student' | 'teacher';
 
+const rockstarLogoUrl = new URL('../../../../vggl5cawm4ee1.webp', import.meta.url).href;
+const viceCityArtUrl = new URL('../../../../videoframe_22023-1024x576.webp', import.meta.url).href;
+
 export const LoginView: React.FC = () => {
   const { login } = useAuth();
 
@@ -533,6 +536,12 @@ export const LoginView: React.FC = () => {
 
       {justLoggedIn && role === 'student' && (
         <div className="vice-city-screen fixed inset-0 z-[100] flex items-center justify-center overflow-hidden text-center">
+          <img
+            src={viceCityArtUrl}
+            alt="Arte de abertura da experiência Vice City"
+            className="absolute inset-0 h-full w-full object-cover opacity-55"
+          />
+          <div className="absolute inset-0 bg-[#101326]/60" />
           <div className="vice-city-scan pointer-events-none absolute inset-y-0 left-0 w-1/3" />
           <div className="pointer-events-none absolute inset-x-0 bottom-[13%] h-32 opacity-80">
             <div className="vice-city-wave absolute inset-x-[-8%] bottom-0 h-24" />
@@ -540,6 +549,11 @@ export const LoginView: React.FC = () => {
             <div className="vice-city-wave absolute inset-x-[-16%] bottom-16 h-16 opacity-40" />
           </div>
           <div className="relative z-10 flex flex-col items-center px-6">
+            <img
+              src={rockstarLogoUrl}
+              alt="Marca Rockstar"
+              className="mb-7 h-20 w-20 rounded-[18px] object-cover shadow-[0_0_34px_rgba(255,139,143,.32)] ring-1 ring-[#fff2d4]/30 sm:h-24 sm:w-24"
+            />
             <div className="vice-city-sun mb-8 h-28 w-28 rounded-full bg-gradient-to-b from-[#fff2d4] via-[#ffb27f] to-[#ff4f70]" />
             <p className="sunset-display text-[11px] font-bold tracking-[0.42em] text-[#35d8e8]">Escola Online presents</p>
             <h1 className="sunset-display mt-3 text-5xl font-black tracking-[0.12em] text-[#fff2d4] drop-shadow-[0_5px_20px_rgba(16,19,38,.55)] sm:text-7xl">

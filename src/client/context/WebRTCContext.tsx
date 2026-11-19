@@ -110,6 +110,8 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const joinedRoomIdRef = useRef<string | null>(null);
   const participantsRef = useRef<ParticipantState[]>([]);
   const remoteStreamsRef = useRef<Map<string, MediaStream>>(new Map());
+  const pendingIceCandidatesRef = useRef<Map<string, RTCIceCandidateInit[]>>(new Map());
+  const isVideoPlaceholderRef = useRef(false);
   // Estado de negociação POR PAR (Perfect Negotiation). Ter um objeto por par é
   // obrigatório para que a 3ª/4ª conexão não corrompa a negociação das outras.
   const negotiationStatesRef = useRef<Map<string, { makingOffer: boolean; ignoreOffer: boolean; polite: boolean }>>(new Map());
@@ -168,6 +170,18 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     []
   );
 
+  const flushPendingIceCandidates = useCallback(async (targetSocketId: string, pc: RTCPeerConnection) => {
+    const pending = pendingIceCandidatesRef.current.get(targetSocketId) || [];
+    pendingIceCandidatesRef.current.delete(targetSocketId);
+    for (const candidate of pending) {
+      try {
+        await pc.addIceCandidate(new RTCIceCandidate(candidate));
+      } catch (err) {
+        console.warn('[WebRTC] Erro ao aplicar ICE pendente de', targetSocketId, err);
+      }
+    }
+  }, []);
+
   // Limpar toda a sessão WebRTC quando o usuário sai da plataforma (logout)
   useEffect(() => {
     if (!user) {
@@ -186,11 +200,21 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         video: video ? { width: { ideal: 640 }, height: { ideal: 480 }, frameRate: { max: 30 } } : false,
         audio: audio,
       });
+      isVideoPlaceholderRef.current = false;
       localStreamRef.current = stream;
       setLocalStream(stream);
       return stream;
     } catch (err) {
       console.warn('[WebRTC] Câmera/microfone não disponível:', err);
+      // Ao entrar apenas com áudio, não crie um canvas de vídeo falso: uma faixa
+      // sintética seria interpretada como câmera existente e impediria a câmera
+      // real de ser solicitada quando o aluno clicar em Ativar câmera.
+      if (!video) {
+        const audioOnlyStream = new MediaStream();
+        localStreamRef.current = audioOnlyStream;
+        setLocalStream(audioOnlyStream);
+        return audioOnlyStream;
+      }
       const dummyCanvas = document.createElement('canvas');
       dummyCanvas.width = 640;
       dummyCanvas.height = 480;
@@ -206,6 +230,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (audioTrack) dummyStream.addTrack(audioTrack);
       }
       localStreamRef.current = dummyStream;
+      isVideoPlaceholderRef.current = true;
       setLocalStream(dummyStream);
       return dummyStream;
     }
@@ -440,6 +465,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       localStreamRef.current = null;
       setLocalStream(null);
     }
+    isVideoPlaceholderRef.current = false;
     if (screenStreamRef.current) {
       screenStreamRef.current.getTracks().forEach((track) => track.stop());
       screenStreamRef.current = null;
@@ -454,6 +480,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     });
     peerConnections.current.clear();
+    pendingIceCandidatesRef.current.clear();
     setRemoteStreamsBoth(() => new Map());
 
     setInCall(false);
@@ -478,7 +505,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
 
       const videoTrack = localStreamRef.current?.getVideoTracks()[0];
-      if (videoTrack && videoTrack.readyState === 'live') {
+      if (videoTrack && videoTrack.readyState === 'live' && !isVideoPlaceholderRef.current) {
         // Track já existe: apenas alternar e propagar para todos os peers
         const newState = !videoTrack.enabled;
         videoTrack.enabled = newState;
@@ -503,6 +530,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         }
 
         const stream = localStreamRef.current!;
+        isVideoPlaceholderRef.current = false;
         if (audioTrack && !stream.getVideoTracks().length) {
           stream.addTrack(newVideoTrack);
         }
@@ -747,6 +775,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       try {
         await pc.setRemoteDescription(new RTCSessionDescription(offer));
+        await flushPendingIceCandidates(callerSocketId, pc);
         await pc.setLocalDescription();
         sendSdp(callerSocketId, pc.localDescription!, st.polite);
         // Após responder, a negociação volta a "stable"; agora sim anexamos
@@ -761,7 +790,7 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         st.ignoreOffer = false;
       }
     },
-    [createPeerConnection, getNegState, sendSdp, socket, attachLocalTracks]
+    [createPeerConnection, getNegState, sendSdp, socket, attachLocalTracks, flushPendingIceCandidates]
   );
 
   // Processar answer recebido
@@ -772,18 +801,24 @@ export const WebRTCProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const st = getNegState(responderSocketId);
       try {
         await pc.setRemoteDescription(new RTCSessionDescription(answer));
+        await flushPendingIceCandidates(responderSocketId, pc);
       } catch (err) {
         console.warn('[WebRTC] Erro ao setar resposta de', responderSocketId, err);
       }
     },
-    [getNegState]
+    [getNegState, flushPendingIceCandidates]
   );
 
   // Receber ICE candidate
   const handleIceCandidate = useCallback(
     async (senderSocketId: string, candidate: RTCIceCandidateInit) => {
       const pc = peerConnections.current.get(senderSocketId);
-      if (!pc) return;
+      if (!pc) {
+        const pending = pendingIceCandidatesRef.current.get(senderSocketId) || [];
+        pending.push(candidate);
+        pendingIceCandidatesRef.current.set(senderSocketId, pending);
+        return;
+      }
       try {
         await pc.addIceCandidate(new RTCIceCandidate(candidate));
       } catch (err) {

@@ -43,10 +43,10 @@ const DButton: React.FC<{
     title={title}
     className={`w-11 h-11 rounded-full flex items-center justify-center transition-all select-none ${
       danger
-        ? 'bg-[#ed4245] hover:bg-[#c03538] text-white'
+        ? 'bg-[#ff4f70] hover:bg-[#ff6f88] text-[#101326] shadow-[0_0_22px_rgba(255,79,112,.24)]'
         : active
-        ? 'bg-[#5865F2] text-white shadow-lg shadow-[#5865F2]/30'
-        : 'bg-[#2b2d31] hover:bg-[#3f4248] text-[#dbdee1]'
+        ? 'bg-[#35d8e8] text-[#101326] shadow-[0_0_22px_rgba(53,216,232,.24)]'
+        : 'bg-[#211d38] hover:bg-[#302653] text-[#fff2d4] border border-[#fff2d4]/10'
     } ${disabled ? 'opacity-40 cursor-not-allowed' : ''} ${className || ''}`}
   >
     {children}
@@ -119,8 +119,8 @@ const VideoTile: React.FC<{
 
   return (
     <div
-      className={`relative rounded-xl overflow-hidden aspect-video bg-[#2b2d31] ${
-        isSpeaking && isMicOn ? 'ring-2 ring-[#3BA55C]' : 'ring-1 ring-[#1f2023]'
+        className={`relative rounded-[20px] overflow-hidden aspect-video bg-[#12142b] shadow-[0_18px_45px_rgba(5,5,18,.28)] ${
+        isSpeaking && isMicOn ? 'ring-2 ring-[#35d8e8]' : 'ring-1 ring-[#fff2d4]/12'
       }`}
     >
       {hasVideo ? (
@@ -286,7 +286,7 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
       : 'grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
 
   return (
-    <div className="relative flex flex-col h-full bg-[#1e1f22] text-white select-none overflow-hidden">
+    <div className="sunset-shell relative flex flex-col h-full text-white select-none overflow-hidden">
       {/* Reações flutuantes */}
       <div className="absolute inset-0 pointer-events-none z-40 overflow-hidden flex items-center justify-center gap-4">
         {activeReactions.map((r) => (
@@ -295,21 +295,21 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
             className="reaction-bubble px-3.5 py-1.5 bg-[#2b2d31]/90 border border-[#3f4147]/70 rounded-full shadow-xl flex items-center gap-2 text-sm"
           >
             <span className="text-2xl">{r.reaction}</span>
-            <span className="text-xs font-semibold text-[#949CF7]">{r.userName}</span>
+            <span className="text-xs font-semibold text-[#35d8e8]">{r.userName}</span>
           </div>
         ))}
       </div>
 
       {/* Top Bar estilo Discord */}
-      <div className="flex items-center justify-between px-3 sm:px-4 py-2.5 bg-[#1e1f22] border-b border-[#2b2d31] z-20 flex-shrink-0">
+      <div className="flex items-center justify-between px-3 sm:px-5 py-3 bg-[#101326]/90 border-b border-[#fff2d4]/10 z-20 flex-shrink-0 shadow-[0_10px_30px_rgba(5,5,18,.2)]">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-9 h-9 rounded-full bg-[#23A559]/15 flex items-center justify-center flex-shrink-0">
-            <PhoneIncoming className="w-4 h-4 text-[#23A559]" />
+          <div className="sunset-blue-glow w-9 h-9 rounded-[13px] bg-[#35d8e8]/15 flex items-center justify-center flex-shrink-0">
+            <PhoneIncoming className="w-4 h-4 text-[#35d8e8]" />
           </div>
           <div className="min-w-0">
-            <h2 className="font-semibold text-sm sm:text-base text-white truncate">{className}</h2>
-            <p className="text-[11px] text-[#949BA4] flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#23A559]" />
+            <h2 className="sunset-display font-semibold text-sm sm:text-base text-[#fff2d4] truncate">{className}</h2>
+            <p className="text-[11px] text-[#fff2d4]/55 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#35d8e8] shadow-[0_0_10px_rgba(53,216,232,.8)]" />
               {handRaises.length > 0 ? (
                 <span className="inline-flex items-center gap-1 text-amber-300">
                   <Hand className="w-3 h-3" /> {handRaises.length} mão{handRaises.length > 1 ? 's' : ''} levantada{handRaises.length > 1 ? 's' : ''}
@@ -318,7 +318,7 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
                 'Conectando...'
               ) : (
                 <span className="inline-flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-[#23A559]" /> Chamada segura • Sala {roomId}
+                  <ShieldCheck className="w-3 h-3 text-[#35d8e8]" /> Chamada segura • Sala {roomId}
                 </span>
               )}
             </p>
@@ -420,12 +420,12 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
             ) : (
               /* ===== Chamada só de VOZ: layout compacto estilo Discord ===== */
               <div className="flex flex-col items-center gap-8 text-center">
-                <div className="w-16 h-16 rounded-full bg-[#23A559]/15 flex items-center justify-center">
-                  <Phone className="w-7 h-7 text-[#23A559]" />
+                <div className="sunset-coral-glow w-16 h-16 rounded-[22px] bg-[#ff4f70]/15 flex items-center justify-center rotate-3">
+                  <Phone className="w-7 h-7 text-[#ff8b8f] -rotate-3" />
                 </div>
                 <div className="space-y-1">
-                  <h2 className="text-2xl sm:text-3xl font-bold text-white">{className}</h2>
-                  <p className="text-[#949BA4] text-sm">
+                  <h2 className="sunset-display text-2xl sm:text-3xl font-bold text-[#fff2d4]">{className}</h2>
+                  <p className="text-[#fff2d4]/55 text-sm">
                     {connecting
                       ? 'Conectando...'
                       : allTiles.length <= 1
@@ -452,11 +452,11 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
 
         {/* Sidebar de Participantes / Moderação */}
         {showParticipantsSidebar && (
-          <div className="w-72 sm:w-80 bg-[#2b2d31] border-l border-[#1f2023] flex flex-col z-30 flex-shrink-0">
+          <div className="w-72 sm:w-80 bg-[#101326]/96 border-l border-[#fff2d4]/10 flex flex-col z-30 flex-shrink-0 shadow-[-18px_0_40px_rgba(5,5,18,.24)]">
             <div className="flex items-center justify-between px-4 py-3 border-b border-[#1f2023]">
               <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-[#5865F2]" />
-                <span>Participantes ({allTiles.length})</span>
+                <Users className="w-4 h-4 text-[#35d8e8]" />
+                <span className="sunset-display">Participantes ({allTiles.length})</span>
               </h3>
               <button
                 onClick={() => setShowParticipantsSidebar(false)}
@@ -574,7 +574,7 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
       </div>
 
       {/* Barra de Controles Inferior estilo Discord */}
-      <div className="px-4 py-3 bg-[#1e1f22] border-t border-[#2b2d31] flex items-center justify-between gap-3 z-20 flex-shrink-0">
+      <div className="px-4 py-3 bg-[#0b0d1c]/95 border-t border-[#fff2d4]/10 flex items-center justify-between gap-3 z-20 flex-shrink-0 shadow-[0_-12px_30px_rgba(5,5,18,.25)]">
         {/* Esquerda: mídia */}
         <div className="flex items-center gap-2">
           <DButton
@@ -652,7 +652,7 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
           {isTeacherOrAdmin ? (
             <button
               onClick={handleEndClass}
-              className="h-11 px-4 bg-[#ed4245] hover:bg-[#c03538] text-white text-sm font-semibold rounded-full shadow-lg shadow-[#ed4245]/30 flex items-center gap-2 transition-all active:scale-95"
+              className="h-11 px-4 bg-[#ff4f70] hover:bg-[#ff6f88] text-[#101326] text-sm font-semibold rounded-[15px] shadow-[0_0_24px_rgba(255,79,112,.22)] flex items-center gap-2 transition-all active:scale-95"
             >
               <Phone className="w-4 h-4" />
               <span className="hidden sm:inline">Encerrar Aula</span>
@@ -661,7 +661,7 @@ export const LiveClassroomRoom: React.FC<LiveClassroomRoomProps> = ({ roomId, cl
           ) : (
             <button
               onClick={handleExit}
-              className="h-11 px-4 bg-[#ed4245] hover:bg-[#c03538] text-white text-sm font-semibold rounded-full shadow-lg shadow-[#ed4245]/30 flex items-center gap-2 transition-all active:scale-95"
+              className="h-11 px-4 bg-[#ff4f70] hover:bg-[#ff6f88] text-[#101326] text-sm font-semibold rounded-[15px] shadow-[0_0_24px_rgba(255,79,112,.22)] flex items-center gap-2 transition-all active:scale-95"
             >
               <Phone className="w-4 h-4" />
               <span className="hidden sm:inline">Sair da Sala</span>
